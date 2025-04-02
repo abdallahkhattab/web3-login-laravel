@@ -1,26 +1,26 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MetaMaskController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/metamask-login', 'welcome');
-Route::post('/metamask-auth', [MetaMaskController::class, 'authenticate']);
-Route::get('/dashboard', function () {
-    return "Welcome, " . auth()->user()->wallet_address;
-})->middleware('auth');
+// MetaMask authentication routes
+Route::post('/metamask-get-nonce', [MetaMaskController::class, 'getNonce'])->name('metamask.get-nonce');
+Route::post('/metamask-auth', [MetaMaskController::class, 'authenticate'])->name('metamask.auth');
 
+Route::view('/metamask-login', 'welcome')->name('metamask.login');
+
+// Dashboard route with authentication middleware
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    return view('dashboard', ['user' => $user]);
+})->middleware('auth')->name('dashboard');
+
+// Logout route
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->middleware('auth')->name('logout');

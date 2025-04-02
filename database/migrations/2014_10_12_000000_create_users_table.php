@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable(); // Some MetaMask users may not have a name initially
-            $table->string('wallet_address')->unique()->nullable(); // Ensure wallet addresses are unique
-            $table->rememberToken();
+            $table->string('name');
+            $table->string('wallet_address')->unique();
+            $table->string('nonce')->nullable();
             $table->timestamps();
-            
         });
     }
 

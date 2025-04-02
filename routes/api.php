@@ -19,6 +19,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::post('/generate-nonce', [AuthController::class, 'generateNonce']);
-Route::post('/verify-signature', [AuthController::class, 'verifySignature']);
